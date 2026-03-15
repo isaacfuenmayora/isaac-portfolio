@@ -1,0 +1,359 @@
+:root {
+	--font-sans: 'Space Grotesk', 'Avenir Next', 'Segoe UI', sans-serif;
+	--font-mono: 'IBM Plex Mono', 'SFMono-Regular', 'Menlo', monospace;
+
+	--ink: #161313;
+	--paper: #fff9ef;
+	--paper-soft: #fef2da;
+	--neutral: #f0ece2;
+	--neutral-deep: #ddd5c6;
+	--black-text: #04070b;
+
+	/* YI */
+	--YI-Background: #14cdda;
+	--YI-Marker-1: #f7be00;
+	--YI-Marker-2: #005e9f;
+	--YI-Marker-3: #fafafa;
+	--YI-Marker-4: #fec19f;
+	--YI-Marker-5: #1e1913;
+	--YI-Marker-6: #4925b5;
+	--YI-Marker-7: #2a2629;
+	--YI-Outline: #fbc800;
+	--YI-Prev: #d90b27;
+
+	/* YI2 */
+	--YI2-1-1: #ea610b;
+	--YI2-1-2: #ffaf51;
+	--YI2-1-3: #462b31;
+	--YI2-1-4: #565656;
+	--YI2-2-1: #7d7d7f;
+	--YI2-2-2: #f73311;
+	--YI2-3-1: #fc9210;
+	--YI2-3-2: #fb3e1a;
+	--YI2-3-3: #023a68;
+	--YI2-3-4: #fcf304;
+
+	/* MF */
+	--MF-Background: #fbdb0a;
+	--MF-Marker-1: #f8f8f8;
+	--MF-Marker-2: #d70b3b;
+	--MF-Marker-3: #232323;
+	--MF-Marker-4: #7a7a7e;
+	--MF-Marker-5: #161414;
+	--MF-Marker-6: #d50a3b;
+	--MF-Outline: #0d2009;
+	--MF-Prev: #14cdda;
+
+	/* MF2 */
+	--MF2-1: #7a452c;
+	--MF2-2: #66d804;
+	--MF2-3: #febe98;
+	--MF2-4: #f33f06;
+	--MF2-5: #435763;
+	--MF2-6: #0ca1de;
+	--MF2-7: #07c07a;
+	--MF2-8: #db0844;
+
+	/* NK */
+	--NK-Background: #f72b2e;
+	--NK-Marker-1: #f9f9f9;
+	--NK-Marker-2: #04d5cb;
+	--NK-Marker-3: #fcaa2a;
+	--NK-Marker-4: #1f3d87;
+	--NK-Marker-5: #ee0b1a;
+	--NK-Marker-6: #ea0825;
+	--NK-Marker-7: #d97534;
+	--NK-Outline: #17293e;
+	--NK-Prev: #fbdb0a;
+
+	/* NK2 */
+	--NK2-1: #fd814d;
+	--NK2-2: #fed863;
+	--NK2-3: #b3631e;
+	--NK2-4: #f1190a;
+	--NK2-5: #af5f15;
+	--NK2-6: #fae4b8;
+	--NK2-7: #f52c04;
+	--NK2-8: #faa697;
+
+	/* SG */
+	--SG-Background: #d1bf83;
+	--SG-Marker-1: #3ab2b1;
+	--SG-Marker-2: #f9f9f9;
+	--SG-Marker-3: #0d0b0b;
+	--SG-Marker-4: #c2c2c2;
+	--SG-Outline: #090a0c;
+	--SG-Prev: #f72b2e; /* normalized from provided "f72b2" */
+
+	/* SG2 */
+	--SG2-1: #b80605;
+	--SG2-2: #6d4d19;
+	--SG2-3: #f77497;
+
+	/*
+		Active theme slots (component-agnostic):
+		attach a palette class/data-attribute to any wrapper/section/card to retarget colors.
+	*/
+	--theme-background: var(--YI-Background);
+	--theme-outline: var(--YI-Outline);
+	--theme-prev: var(--YI-Prev);
+	--theme-marker-1: var(--YI-Marker-1);
+	--theme-marker-2: var(--YI-Marker-2);
+	--theme-marker-3: var(--YI-Marker-3);
+	--theme-marker-4: var(--YI-Marker-4);
+	--theme-marker-5: var(--YI-Marker-5);
+	--theme-marker-6: var(--YI-Marker-6);
+	--theme-marker-7: var(--YI-Marker-7);
+	--theme-ink: var(--black-text);
+
+	--space-1: 0.5rem;
+	--space-2: 0.75rem;
+	--space-3: 1rem;
+	--space-4: 1.5rem;
+	--space-5: 2rem;
+	--space-6: 3rem;
+	--space-7: 4.5rem;
+
+	--radius-sm: 12px;
+	--radius-md: 18px;
+	--radius-lg: 24px;
+
+	--line-strong: 3px;
+	--line-soft: 2px;
+
+	--motion-fast: 160ms;
+	--motion-med: 280ms;
+	--motion-slow: 460ms;
+	--easing-snappy: cubic-bezier(0.21, 0.74, 0.29, 1.01);
+	--easing-soft: cubic-bezier(0.27, 0.23, 0.15, 1);
+}
+
+* {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+	font-family: var(--font-sans);
+	color: var(--ink);
+	background: var(--paper);
+	scroll-behavior: smooth;
+}
+
+body {
+	line-height: 1.5;
+}
+
+a {
+	color: inherit;
+}
+
+a:focus-visible,
+button:focus-visible {
+	outline: 3px solid #111;
+	outline-offset: 3px;
+}
+
+main {
+	position: relative;
+	overflow-x: clip;
+}
+
+.palette-YI,
+[data-palette='YI'] {
+	--theme-background: var(--YI-Background);
+	--theme-outline: var(--YI-Outline);
+	--theme-prev: var(--YI-Prev);
+	--theme-marker-1: var(--YI-Marker-1);
+	--theme-marker-2: var(--YI-Marker-2);
+	--theme-marker-3: var(--YI-Marker-3);
+	--theme-marker-4: var(--YI-Marker-4);
+	--theme-marker-5: var(--YI-Marker-5);
+	--theme-marker-6: var(--YI-Marker-6);
+	--theme-marker-7: var(--YI-Marker-7);
+}
+
+.palette-MF,
+[data-palette='MF'] {
+	--theme-background: var(--MF-Background);
+	--theme-outline: var(--MF-Outline);
+	--theme-prev: var(--MF-Prev);
+	--theme-marker-1: var(--MF-Marker-1);
+	--theme-marker-2: var(--MF-Marker-2);
+	--theme-marker-3: var(--MF-Marker-3);
+	--theme-marker-4: var(--MF-Marker-4);
+	--theme-marker-5: var(--MF-Marker-5);
+	--theme-marker-6: var(--MF-Marker-6);
+	--theme-marker-7: var(--MF-Marker-1);
+}
+
+.palette-NK,
+[data-palette='NK'] {
+	--theme-background: var(--NK-Background);
+	--theme-outline: var(--NK-Outline);
+	--theme-prev: var(--NK-Prev);
+	--theme-marker-1: var(--NK-Marker-1);
+	--theme-marker-2: var(--NK-Marker-2);
+	--theme-marker-3: var(--NK-Marker-3);
+	--theme-marker-4: var(--NK-Marker-4);
+	--theme-marker-5: var(--NK-Marker-5);
+	--theme-marker-6: var(--NK-Marker-6);
+	--theme-marker-7: var(--NK-Marker-7);
+}
+
+.palette-SG,
+[data-palette='SG'] {
+	--theme-background: var(--SG-Background);
+	--theme-outline: var(--SG-Outline);
+	--theme-prev: var(--SG-Prev);
+	--theme-marker-1: var(--SG-Marker-1);
+	--theme-marker-2: var(--SG-Marker-2);
+	--theme-marker-3: var(--SG-Marker-3);
+	--theme-marker-4: var(--SG-Marker-4);
+	--theme-marker-5: var(--SG-Marker-1);
+	--theme-marker-6: var(--SG-Marker-2);
+	--theme-marker-7: var(--SG-Marker-3);
+}
+
+.palette-YI2,
+[data-palette='YI2'] {
+	--theme-background: var(--YI2-1-1);
+	--theme-outline: var(--YI2-3-4);
+	--theme-prev: var(--YI-Background);
+	--theme-marker-1: var(--YI2-1-2);
+	--theme-marker-2: var(--YI2-1-3);
+	--theme-marker-3: var(--YI2-1-4);
+	--theme-marker-4: var(--YI2-2-1);
+	--theme-marker-5: var(--YI2-2-2);
+	--theme-marker-6: var(--YI2-3-1);
+	--theme-marker-7: var(--YI2-3-2);
+}
+
+.palette-MF2,
+[data-palette='MF2'] {
+	--theme-background: var(--MF2-1);
+	--theme-outline: var(--MF2-8);
+	--theme-prev: var(--MF-Background);
+	--theme-marker-1: var(--MF2-2);
+	--theme-marker-2: var(--MF2-3);
+	--theme-marker-3: var(--MF2-4);
+	--theme-marker-4: var(--MF2-5);
+	--theme-marker-5: var(--MF2-6);
+	--theme-marker-6: var(--MF2-7);
+	--theme-marker-7: var(--MF2-8);
+}
+
+.palette-NK2,
+[data-palette='NK2'] {
+	--theme-background: var(--NK2-1);
+	--theme-outline: var(--NK2-4);
+	--theme-prev: var(--NK-Background);
+	--theme-marker-1: var(--NK2-2);
+	--theme-marker-2: var(--NK2-3);
+	--theme-marker-3: var(--NK2-5);
+	--theme-marker-4: var(--NK2-6);
+	--theme-marker-5: var(--NK2-7);
+	--theme-marker-6: var(--NK2-8);
+	--theme-marker-7: var(--NK2-2);
+}
+
+.palette-SG2,
+[data-palette='SG2'] {
+	--theme-background: var(--SG2-1);
+	--theme-outline: var(--SG2-2);
+	--theme-prev: var(--SG-Background);
+	--theme-marker-1: var(--SG2-3);
+	--theme-marker-2: var(--SG2-2);
+	--theme-marker-3: var(--SG2-1);
+	--theme-marker-4: var(--SG2-3);
+	--theme-marker-5: var(--SG2-2);
+	--theme-marker-6: var(--SG2-1);
+	--theme-marker-7: var(--SG2-3);
+}
+
+/*
+	Optional generic utilities for experimenting with palette application.
+	Use on any wrapper/section/card as needed.
+*/
+.use-theme-background {
+	background: var(--theme-background);
+}
+
+.use-theme-background-soft {
+	background: color-mix(in srgb, var(--theme-background) 24%, var(--paper) 76%);
+}
+
+.use-theme-gradient {
+	background: linear-gradient(
+		160deg,
+		color-mix(in srgb, var(--theme-background) 30%, var(--paper) 70%),
+		color-mix(in srgb, var(--theme-marker-1) 20%, var(--paper) 80%)
+	);
+}
+
+.use-theme-prev-bridge {
+	background: linear-gradient(
+		180deg,
+		color-mix(in srgb, var(--theme-prev) 45%, var(--paper) 55%) 0%,
+		color-mix(in srgb, var(--theme-background) 26%, var(--paper) 74%) 52%,
+		color-mix(in srgb, var(--theme-marker-1) 18%, var(--paper) 82%) 100%
+	);
+}
+
+.container {
+	width: min(1120px, 100% - 2.5rem);
+	margin-inline: auto;
+}
+
+.meta-label {
+	font-family: var(--font-mono);
+	font-size: 0.75rem;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+}
+
+.eyebrow {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	font-family: var(--font-mono);
+	font-size: 0.75rem;
+	font-weight: 600;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+}
+
+.section-title {
+	margin: 0.35rem 0 0;
+	font-size: clamp(1.85rem, 3.2vw, 2.8rem);
+	line-height: 1.12;
+}
+
+.section-description {
+	max-width: 62ch;
+	margin: 0.8rem 0 0;
+	font-size: clamp(1rem, 1.4vw, 1.1rem);
+}
+
+@media (max-width: 768px) {
+	.container {
+		width: min(1120px, 100% - 1.25rem);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	html,
+	body {
+		scroll-behavior: auto;
+	}
+
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
+}
