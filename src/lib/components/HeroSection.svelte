@@ -1,4 +1,5 @@
 <script lang="ts">
+	import MarkerFill from '$lib/components/MarkerFill.svelte';
 	import NavLinkItem from '$lib/components/NavLinkItem.svelte';
 	import type { NavLink, PaletteName } from '$lib/data/site';
 
@@ -18,16 +19,25 @@
 	let { hero, heroLinks }: Props = $props();
 </script>
 
-<section id="hero" class="use-theme-prev-bridge" data-palette={hero.palette}>
+<section id="hero" class="use-theme-background" data-palette={hero.palette}>
 	<div class="container">
-		<p class="eyebrow">{hero.role}</p>
-		<h1>{hero.name}</h1>
-		<p class="section-description">{hero.summary}</p>
-		<p>{hero.subline}</p>
-		<div class="actions">
-			{#each heroLinks as link (link.href)}
-				<NavLinkItem {link} className="hero-link" />
-			{/each}
+		<div class="hero-panel">
+			<div class="marker-box">
+				<MarkerFill markerStart={2} density="medium" animated={true} opacity={0.36} />
+			</div>
+			<div class="content-box">
+				<div class="hero-content">
+					<p class="eyebrow">{hero.role}</p>
+					<h1>{hero.name}</h1>
+					<p class="section-description">{hero.summary}</p>
+					<p>{hero.subline}</p>
+					<div class="actions">
+						{#each heroLinks as link (link.href)}
+							<NavLinkItem {link} className="hero-link" />
+						{/each}
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </section>
@@ -42,13 +52,43 @@
 		gap: var(--space-4);
 	}
 
+	.hero-panel {
+		position: relative;
+		border-radius: calc(var(--radius-lg) + 4px);
+	}
+
+	.marker-box {
+		position: absolute;
+		inset: -0.9rem;
+		border-radius: calc(var(--radius-lg) + 18px);
+		overflow: hidden;
+		pointer-events: none;
+	}
+
+	.content-box {
+		position: relative;
+		z-index: 1;
+		margin: 1.3rem;
+		border-radius: var(--radius-lg);
+		border: 2px solid color-mix(in srgb, var(--theme-outline) 70%, black 30%);
+		background: transparent;
+	}
+
+	.hero-content {
+		position: relative;
+		z-index: 1;
+		display: grid;
+		gap: var(--space-4);
+		padding: clamp(1rem, 2.5vw, 1.75rem);
+	}
+
 	h1 {
 		margin: 0;
 		font-size: clamp(2.3rem, 8vw, 4.5rem);
 		line-height: 1.02;
 	}
 
-	section .container > p {
+	.hero-content > p {
 		margin: 0;
 	}
 
