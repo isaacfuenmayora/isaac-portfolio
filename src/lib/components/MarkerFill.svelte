@@ -1,19 +1,13 @@
 <script lang="ts">
+	import type { Snippet } from 'svelte';
+	import { Rectangle, type Point } from '$lib/utils/geometry';
+
 	interface Props {
 		markerStart?: 1 | 2 | 3 | 4 | 5 | 6 | 7;
 		density?: 'low' | 'medium' | 'high';
 		animated?: boolean;
 		opacity?: number;
-		jitter?: number;
-	}
-
-	interface MarkerBox {
-		left: number;
-		right: number;
-		top: number;
-		bottom: number;
-		length: number;
-		height: number;
+		children?: Snippet;
 	}
 
 	const VIEWBOX_WIDTH = 1000;
@@ -24,7 +18,7 @@
 		density = 'high',
 		animated = true,
 		opacity = 0.34,
-		jitter = 20
+		children
 	}: Props = $props();
 
 	const densityWidth: Record<'low' | 'medium' | 'high', number> = {
@@ -56,73 +50,8 @@
 		return `${Math.max(0.1, opacity)}`;
 	}
 
-	function createMarkerBox(strokeWidth: number): MarkerBox {
-		const inset = densityInset[density];
-		const margin = Math.max(8, inset + strokeWidth * 0.18 + jitter * 0.1); // TODO: check if jitter makes sense here
-		const left = margin - strokeWidth * 0.65;
-		const right = VIEWBOX_WIDTH - margin + strokeWidth * 0.65;
-		const top = margin - strokeWidth * 0.6;
-		const bottom = VIEWBOX_HEIGHT - margin + strokeWidth * 0.6;
-
-		return {
-			left,
-			right,
-			top,
-			bottom,
-			length: right - left,
-			height: bottom - top
-		};
-	}
-
-	interface Point {
-		x: number;
-		y: number;
-	}
-
 	function round(n: number): number {
 		return Number(n.toFixed(2));
-	}
-
-	function getBoxIntersections(
-		m: number,
-		b: number,
-		length: number,
-		height: number
-	): [Point, Point] | null {
-		const eps = 0.01;
-		const hits: Point[] = [];
-
-		// Top edge (y=0): x = -b/m
-		const xTop = -b / m;
-		if (xTop >= 0 && xTop <= length) {
-			hits.push({ x: xTop, y: 0 });
-		}
-
-		// Bottom edge (y=height): x = (height - b) / m
-		const xBot = (height - b) / m;
-		if (xBot >= 0 && xBot <= length) {
-			hits.push({ x: xBot, y: height });
-		}
-
-		// Left edge (x=0): y = b
-		if (b >= 0 && b <= height) {
-			if (!hits.some((p) => Math.abs(p.x) < eps && Math.abs(p.y - b) < eps)) {
-				hits.push({ x: 0, y: b });
-			}
-		}
-
-		// Right edge (x=length): y = m * length + b
-		const yRight = m * length + b;
-		if (yRight >= 0 && yRight <= height) {
-			if (!hits.some((p) => Math.abs(p.x - length) < eps && Math.abs(p.y - yRight) < eps)) {
-				hits.push({ x: length, y: yRight });
-			}
-		}
-
-		if (hits.length < 2) return null;
-
-		hits.sort((a, b) => a.x - b.x || a.y - b.y);
-		return [hits[0], hits[1]];
 	}
 
 	function randomNormal(mean: number, stdDev: number, clamp?: number): number {
@@ -132,6 +61,16 @@
 		const value = mean + z * stdDev;
 		if (clamp === undefined) return value;
 		return Math.max(mean - clamp, Math.min(mean + clamp, value));
+	}
+
+	function createMarkerBox(strokeWidth: number): Rectangle {
+		const margin = Math.max(8, densityInset[density] + strokeWidth * 0.18);
+		return new Rectangle(
+			margin - strokeWidth * 0.65,
+			margin - strokeWidth * 0.6,
+			VIEWBOX_WIDTH - margin + strokeWidth * 0.65,
+			VIEWBOX_HEIGHT - margin + strokeWidth * 0.6
+		);
 	}
 
 	function strokePath(): string {
@@ -152,18 +91,40 @@
 		const baseSlope = -1.2;
 		const spacing = strokeWidth * 1.1;
 		const bStep = spacing * Math.sqrt(1 + baseSlope * baseSlope);
-		let b = -baseSlope * box.length * 0.05;
+		const maxExtend = strokeWidth * 1.5;
 
-		let intersections = getBoxIntersections(baseSlope, b, box.length, box.height);
-		if (intersections) moveTo(intersections[0]);
+		let b = -baseSlope * box.length * 0.05;
+		let m = baseSlope;
+		let intersections = box.getIntersections(m, b);
+		let first = true;
 
 		while (intersections) {
-			let [p1, p2] = intersections;
-			lineTo(p1);
-			lineTo(p2);
+			const [p1, p2] = intersections;
+
+			// Unit vector along the line from p1 → p2
+			const dx = p2.x - p1.x;
+			const dy = p2.y - p1.y;
+			const len = Math.sqrt(dx * dx + dy * dy);
+			const ux = dx / len;
+			const uy = dy / len;
+
+			// Extend each end outward by a random amount up to maxExtend
+			const startExtend = Math.random() * maxExtend;
+			const endExtend = Math.random() * maxExtend;
+			const extP1 = { x: p1.x - ux * startExtend, y: p1.y - uy * startExtend };
+			const extP2 = { x: p2.x + ux * endExtend, y: p2.y + uy * endExtend };
+
+			if (first) {
+				moveTo(extP1);
+				first = false;
+			} else {
+				lineTo(extP1);
+			}
+			lineTo(extP2);
+
 			b += bStep;
-			let m = randomNormal(baseSlope, 0.03, 0.025);
-			intersections = getBoxIntersections(m, b, box.length, box.height);
+			m = randomNormal(baseSlope, 0.03, 0.025);
+			intersections = box.getIntersections(m, b);
 		}
 
 		return parts.join(' ');
@@ -175,29 +136,38 @@
 	let pathOpacity = $derived(opacityFor());
 </script>
 
-<div class={`marker-fill ${animated ? 'is-animated' : ''}`} aria-hidden="true">
-	<svg viewBox="0 0 1000 720" preserveAspectRatio="none" role="presentation">
+<div class={`marker-fill ${animated ? 'is-animated' : ''}`}>
+	<svg
+		class="marker-fill-svg"
+		viewBox="0 0 1000 720"
+		preserveAspectRatio="none"
+		role="presentation"
+		aria-hidden="true"
+	>
 		<path
 			pathLength="1"
 			d={pathD}
 			style={`--stroke:${pathStroke}; --width:${pathWidth}; --opacity:${pathOpacity}; --delay:0ms;`}
 		/>
 	</svg>
+	{@render children?.()}
 </div>
 
 <style>
 	.marker-fill {
-		position: absolute;
-		inset: 0;
-		pointer-events: none;
-		background: transparent;
+		position: relative;
 		isolation: isolate;
 	}
 
-	svg {
+	.marker-fill-svg {
+		position: absolute;
+		inset: 0;
 		width: 100%;
 		height: 100%;
 		display: block;
+		overflow: visible;
+		pointer-events: none;
+		z-index: 0;
 	}
 
 	path {

@@ -21,10 +21,7 @@
 
 <section id="hero" class="use-theme-background" data-palette={hero.palette}>
 	<div class="container">
-		<div class="hero-panel">
-			<div class="marker-box">
-				<MarkerFill markerStart={2} density="medium" animated={true} opacity={0.36} />
-			</div>
+		<MarkerFill markerStart={2} density="medium" animated={true} opacity={0.36}>
 			<div class="content-box">
 				<div class="hero-content">
 					<p class="eyebrow">{hero.role}</p>
@@ -38,7 +35,7 @@
 					</div>
 				</div>
 			</div>
-		</div>
+		</MarkerFill>
 	</div>
 </section>
 
@@ -50,19 +47,6 @@
 	section .container {
 		display: grid;
 		gap: var(--space-4);
-	}
-
-	.hero-panel {
-		position: relative;
-		border-radius: calc(var(--radius-lg) + 4px);
-	}
-
-	.marker-box {
-		position: absolute;
-		inset: -0.9rem;
-		border-radius: calc(var(--radius-lg) + 18px);
-		overflow: hidden;
-		pointer-events: none;
 	}
 
 	.content-box {
