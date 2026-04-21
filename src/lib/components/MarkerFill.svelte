@@ -7,6 +7,7 @@
 		density?: 'low' | 'medium' | 'high';
 		animated?: boolean;
 		opacity?: number;
+		curvature?: number;
 		children?: Snippet;
 	}
 
@@ -18,8 +19,13 @@
 		density = 'high',
 		animated = true,
 		opacity = 0.34,
+		curvature = 0.5,
 		children
 	}: Props = $props();
+
+	$effect(() => {
+		if (curvature < 0) throw new Error(`MarkerFill: curvature must be >= 0, got ${curvature}`);
+	});
 
 	const densityWidth: Record<'low' | 'medium' | 'high', number> = {
 		low: 36,
@@ -77,15 +83,30 @@
 		const strokeWidth = widthNumber();
 		const box = createMarkerBox(strokeWidth);
 		const parts: string[] = [];
+		let current: Point = { x: 0, y: 0 };
+		const normalize = (dx: number, dy: number): Point => {
+			const len = Math.sqrt(dx * dx + dy * dy);
+			return { x: dx / len, y: dy / len };
+		};
 		const moveTo = (point: Point) => {
+			current = point;
 			const x = box.left + point.x;
 			const y = box.top + point.y;
 			parts.push(`M ${round(x)} ${round(y)}`);
 		};
-		const lineTo = (point: Point) => {
-			const x = box.left + point.x;
-			const y = box.top + point.y;
-			parts.push(`L ${round(x)} ${round(y)}`);
+		const curveTo = (end: Point) => {
+			const unit = normalize(end.x - current.x, end.y - current.y);
+			const perpOffset = randomNormal(
+				0,
+				strokeWidth * 0.15 * curvature,
+				strokeWidth * 0.3 * curvature
+			);
+			const controlX = box.left + (current.x + end.x) / 2 + -unit.y * perpOffset;
+			const controlY = box.top + (current.y + end.y) / 2 + unit.x * perpOffset;
+			const endX = box.left + end.x;
+			const endY = box.top + end.y;
+			current = end;
+			parts.push(`Q ${round(controlX)} ${round(controlY)} ${round(endX)} ${round(endY)}`);
 		};
 
 		const baseSlope = -1.2;
@@ -102,25 +123,27 @@
 			const [p1, p2] = intersections;
 
 			// Unit vector along the line from p1 → p2
-			const dx = p2.x - p1.x;
-			const dy = p2.y - p1.y;
-			const len = Math.sqrt(dx * dx + dy * dy);
-			const ux = dx / len;
-			const uy = dy / len;
+			const unit = normalize(p2.x - p1.x, p2.y - p1.y);
 
 			// Extend each end outward by a random amount up to maxExtend
 			const startExtend = Math.random() * maxExtend;
 			const endExtend = Math.random() * maxExtend;
-			const extP1 = { x: p1.x - ux * startExtend, y: p1.y - uy * startExtend };
-			const extP2 = { x: p2.x + ux * endExtend, y: p2.y + uy * endExtend };
+			const extP1 = {
+				x: p1.x - unit.x * startExtend,
+				y: p1.y - unit.y * startExtend
+			};
+			const extP2 = {
+				x: p2.x + unit.x * endExtend,
+				y: p2.y + unit.y * endExtend
+			};
 
 			if (first) {
 				moveTo(extP1);
 				first = false;
 			} else {
-				lineTo(extP1);
+				curveTo(extP1);
 			}
-			lineTo(extP2);
+			curveTo(extP2);
 
 			b += bStep;
 			m = randomNormal(baseSlope, 0.03, 0.025);
@@ -129,11 +152,6 @@
 
 		return parts.join(' ');
 	}
-
-	let pathD = $derived(strokePath());
-	let pathStroke = $derived(markerVar(0));
-	let pathWidth = $derived(widthFor());
-	let pathOpacity = $derived(opacityFor());
 </script>
 
 <div class={`marker-fill ${animated ? 'is-animated' : ''}`}>
@@ -146,8 +164,11 @@
 	>
 		<path
 			pathLength="1"
-			d={pathD}
-			style={`--stroke:${pathStroke}; --width:${pathWidth}; --opacity:${pathOpacity}; --delay:0ms;`}
+			d={strokePath()}
+			style:--stroke={markerVar(0)}
+			style:--width={widthFor()}
+			style:--opacity={opacityFor()}
+			style:--delay="0ms"
 		/>
 	</svg>
 	{@render children?.()}
