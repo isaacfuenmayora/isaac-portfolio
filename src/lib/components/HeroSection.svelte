@@ -21,7 +21,7 @@
 
 <section id="hero" class="use-theme-background" data-palette={hero.palette}>
 	<div class="container">
-		<MarkerFill markerStart={2} density="medium" animated={true} opacity={0.36}>
+		<MarkerFill color="var(--theme-marker-2)" opacity={0.36}>
 			<div class="content-box">
 				<div class="hero-content">
 					<p class="eyebrow">{hero.role}</p>

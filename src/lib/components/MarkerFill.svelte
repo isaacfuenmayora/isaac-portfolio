@@ -2,55 +2,74 @@
 	import type { Snippet } from 'svelte';
 	import { Rectangle, type Point } from '$lib/utils/geometry';
 
+	// SSR fallback dimensions before ResizeObserver fires
+	const FALLBACK_WIDTH = 1000;
+	const FALLBACK_HEIGHT = 720;
+
+	// Proportion of container height used as default stroke width
+	const DEFAULT_STROKE_WIDTH_RATIO = 0.15;
+	// Proportion of the shorter container side used as default inset
+	const DEFAULT_INSET_RATIO = 0.15;
+
+	// Box geometry: margin overshoot as fraction of strokeWidth; extend as fraction of container dimension
+	const BOX_MARGIN_STROKE_FACTOR = 0.18;
+	const BOX_EXTEND_X_FACTOR = 0.035; // fraction of containerWidth
+	const BOX_EXTEND_Y_FACTOR = 0.05; // fraction of containerHeight
+
+	// Curvature: stdDev and clamp as fractions of strokeWidth (scaled by curvature prop)
+	const CURVE_STDDEV_FACTOR = 0.15;
+	const CURVE_CLAMP_FACTOR = 0.3;
+
+	// Per-stroke slope jitter
+	const SLOPE_JITTER_STDDEV = 0.0125;
+	const SLOPE_JITTER_CLAMP = 0.02;
+
 	interface Props {
-		markerStart?: 1 | 2 | 3 | 4 | 5 | 6 | 7;
-		density?: 'low' | 'medium' | 'high';
+		strokeWidth?: number;
+		strokeSpacing?: number;
+		slope?: number;
+		inset?: number;
+		color?: string;
 		animated?: boolean;
 		opacity?: number;
 		curvature?: number;
 		children?: Snippet;
 	}
 
-	const VIEWBOX_WIDTH = 1000;
-	const VIEWBOX_HEIGHT = 720;
-
 	let {
-		markerStart = 1,
-		density = 'high',
+		strokeWidth: strokeWidthProp,
+		strokeSpacing = 1.0,
+		slope = -1.25,
+		inset: insetProp,
+		color = 'currentColor',
 		animated = true,
 		opacity = 0.34,
 		curvature = 0.5,
 		children
 	}: Props = $props();
 
+	let containerEl: HTMLDivElement | undefined = $state();
+	let containerWidth = $state(FALLBACK_WIDTH);
+	let containerHeight = $state(FALLBACK_HEIGHT);
+
+	$effect(() => {
+		if (!containerEl) return;
+		const observer = new ResizeObserver(([entry]) => {
+			containerWidth = entry.contentRect.width;
+			containerHeight = entry.contentRect.height;
+		});
+		observer.observe(containerEl);
+		return () => observer.disconnect();
+	});
+
+	const strokeWidth = $derived(strokeWidthProp ?? containerHeight * DEFAULT_STROKE_WIDTH_RATIO);
+	const inset = $derived(
+		insetProp ?? Math.min(containerWidth, containerHeight) * DEFAULT_INSET_RATIO
+	);
+
 	$effect(() => {
 		if (curvature < 0) throw new Error(`MarkerFill: curvature must be >= 0, got ${curvature}`);
 	});
-
-	const densityWidth: Record<'low' | 'medium' | 'high', number> = {
-		low: 36,
-		medium: 54,
-		high: 72
-	};
-
-	const densityInset: Record<'low' | 'medium' | 'high', number> = {
-		low: 56,
-		medium: 40,
-		high: 24
-	};
-
-	function markerVar(index: number): string {
-		const marker = (((markerStart - 1 + index) % 7) + 1) as 1 | 2 | 3 | 4 | 5 | 6 | 7;
-		return `var(--theme-marker-${marker})`;
-	}
-
-	function widthNumber(): number {
-		return Math.max(26, densityWidth[density]);
-	}
-
-	function widthFor(): string {
-		return `${widthNumber()}`;
-	}
 
 	function opacityFor(): string {
 		return `${Math.max(0.1, opacity)}`;
@@ -69,19 +88,20 @@
 		return Math.max(mean - clamp, Math.min(mean + clamp, value));
 	}
 
-	function createMarkerBox(strokeWidth: number): Rectangle {
-		const margin = Math.max(8, densityInset[density] + strokeWidth * 0.18);
+	function createInnerBox(): Rectangle {
+		const margin = Math.max(8, inset + strokeWidth * BOX_MARGIN_STROKE_FACTOR);
+		const extendX = containerWidth * BOX_EXTEND_X_FACTOR;
+		const extendY = containerHeight * BOX_EXTEND_Y_FACTOR;
 		return new Rectangle(
-			margin - strokeWidth * 0.65,
-			margin - strokeWidth * 0.6,
-			VIEWBOX_WIDTH - margin + strokeWidth * 0.65,
-			VIEWBOX_HEIGHT - margin + strokeWidth * 0.6
+			Math.max(0, margin - extendX),
+			Math.max(0, margin - extendY),
+			Math.min(containerWidth, containerWidth - margin + extendX),
+			Math.min(containerHeight, containerHeight - margin + extendY)
 		);
 	}
 
 	function strokePath(): string {
-		const strokeWidth = widthNumber();
-		const box = createMarkerBox(strokeWidth);
+		const innerBox = createInnerBox();
 		const parts: string[] = [];
 		let current: Point = { x: 0, y: 0 };
 		const normalize = (dx: number, dy: number): Point => {
@@ -90,33 +110,32 @@
 		};
 		const moveTo = (point: Point) => {
 			current = point;
-			const x = box.left + point.x;
-			const y = box.top + point.y;
+			const x = innerBox.left + point.x;
+			const y = innerBox.top + point.y;
 			parts.push(`M ${round(x)} ${round(y)}`);
 		};
 		const curveTo = (end: Point) => {
 			const unit = normalize(end.x - current.x, end.y - current.y);
 			const perpOffset = randomNormal(
 				0,
-				strokeWidth * 0.15 * curvature,
-				strokeWidth * 0.3 * curvature
+				strokeWidth * CURVE_STDDEV_FACTOR * curvature,
+				strokeWidth * CURVE_CLAMP_FACTOR * curvature
 			);
-			const controlX = box.left + (current.x + end.x) / 2 + -unit.y * perpOffset;
-			const controlY = box.top + (current.y + end.y) / 2 + unit.x * perpOffset;
-			const endX = box.left + end.x;
-			const endY = box.top + end.y;
+			const controlX = innerBox.left + (current.x + end.x) / 2 + -unit.y * perpOffset;
+			const controlY = innerBox.top + (current.y + end.y) / 2 + unit.x * perpOffset;
+			const endX = innerBox.left + end.x;
+			const endY = innerBox.top + end.y;
 			current = end;
 			parts.push(`Q ${round(controlX)} ${round(controlY)} ${round(endX)} ${round(endY)}`);
 		};
 
-		const baseSlope = -1.2;
-		const spacing = strokeWidth * 1.1;
-		const bStep = spacing * Math.sqrt(1 + baseSlope * baseSlope);
+		const gap = strokeWidth * strokeSpacing;
+		const bStep = gap * Math.sqrt(1 + slope * slope);
 		const maxExtend = strokeWidth * 1.5;
 
-		let b = -baseSlope * box.length * 0.05;
-		let m = baseSlope;
-		let intersections = box.getIntersections(m, b);
+		let b = -slope * innerBox.length * 0.025; // start slightly inside the box
+		let m = slope;
+		let intersections = innerBox.getIntersections(m, b);
 		let first = true;
 
 		while (intersections) {
@@ -146,18 +165,18 @@
 			curveTo(extP2);
 
 			b += bStep;
-			m = randomNormal(baseSlope, 0.03, 0.025);
-			intersections = box.getIntersections(m, b);
+			m = randomNormal(slope, SLOPE_JITTER_STDDEV, SLOPE_JITTER_CLAMP);
+			intersections = innerBox.getIntersections(m, b);
 		}
 
 		return parts.join(' ');
 	}
 </script>
 
-<div class={`marker-fill ${animated ? 'is-animated' : ''}`}>
+<div class={`marker-fill ${animated ? 'is-animated' : ''}`} bind:this={containerEl}>
 	<svg
 		class="marker-fill-svg"
-		viewBox="0 0 1000 720"
+		viewBox="0 0 {containerWidth} {containerHeight}"
 		preserveAspectRatio="none"
 		role="presentation"
 		aria-hidden="true"
@@ -165,8 +184,8 @@
 		<path
 			pathLength="1"
 			d={strokePath()}
-			style:--stroke={markerVar(0)}
-			style:--width={widthFor()}
+			style:--stroke={color}
+			style:--width={strokeWidth}
 			style:--opacity={opacityFor()}
 			style:--delay="0ms"
 		/>
