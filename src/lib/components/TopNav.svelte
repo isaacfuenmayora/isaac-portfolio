@@ -26,6 +26,7 @@
 		position: sticky;
 		top: 0;
 		z-index: 10;
+		height: var(--nav-height);
 		padding: var(--space-3) 0;
 		background: color-mix(in srgb, var(--paper) 78%, white 22%);
 		border-bottom: 1px solid color-mix(in srgb, var(--theme-outline) 24%, transparent);
