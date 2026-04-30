@@ -1,4 +1,5 @@
 <script lang="ts">
+	import PageSection from '$lib/components/PageSection.svelte';
 	import type { Project } from '$lib/data/site';
 
 	interface Props {
@@ -8,7 +9,7 @@
 	let { projects }: Props = $props();
 </script>
 
-<section id="projects" class="use-theme-gradient" data-palette="MF">
+<PageSection id="projects" palette="MF">
 	<div class="container">
 		<header>
 			<p class="eyebrow">Featured Projects</p>
@@ -36,14 +37,10 @@
 			{/each}
 		</div>
 	</div>
-</section>
+</PageSection>
 
 <style>
-	section {
-		padding: clamp(3.25rem, 8vw, 6rem) 0;
-	}
-
-	section .container {
+	.container {
 		display: grid;
 		gap: var(--space-4);
 	}

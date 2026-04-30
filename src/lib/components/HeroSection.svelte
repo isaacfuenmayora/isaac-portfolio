@@ -1,6 +1,7 @@
 <script lang="ts">
 	import MarkerFill from '$lib/components/MarkerFill.svelte';
 	import NavLinkItem from '$lib/components/NavLinkItem.svelte';
+	import PageSection from '$lib/components/PageSection.svelte';
 	import type { NavLink, PaletteName } from '$lib/data/site';
 
 	interface HeroData {
@@ -19,7 +20,7 @@
 	let { hero, heroLinks }: Props = $props();
 </script>
 
-<section id="hero" class="use-theme-background" data-palette={hero.palette}>
+<PageSection id="hero" palette={hero.palette}>
 	<div class="container">
 		<MarkerFill color="var(--theme-marker-2)" opacity={0.36}>
 			<div class="content-box">
@@ -37,16 +38,12 @@
 			</div>
 		</MarkerFill>
 	</div>
-</section>
+</PageSection>
 
 <style>
-	section {
-		padding: clamp(3.25rem, 8vw, 6rem) 0;
-	}
-
-	section .container {
+	.container {
 		display: grid;
-		gap: var(--space-4);
+		gap: clamp(var(--space-3), 2.5vw, var(--space-6));
 	}
 
 	.content-box {

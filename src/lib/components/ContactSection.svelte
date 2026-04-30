@@ -1,4 +1,5 @@
 <script lang="ts">
+	import PageSection from '$lib/components/PageSection.svelte';
 	import type { PaletteName } from '$lib/data/site';
 
 	interface ContactData {
@@ -17,7 +18,7 @@
 	let { contact }: Props = $props();
 </script>
 
-<section id="contact" class="use-theme-gradient" data-palette={contact.palette}>
+<PageSection id="contact" palette={contact.palette}>
 	<div class="container">
 		<header>
 			<p class="eyebrow">Contact</p>
@@ -34,16 +35,12 @@
 			</ul>
 		</article>
 	</div>
-</section>
+</PageSection>
 
 <style>
-	section {
-		padding: clamp(3.25rem, 8vw, 6rem) 0;
-	}
-
-	section .container {
+	.container {
 		display: grid;
-		gap: var(--space-4);
+		gap: clamp(var(--space-3), 2.5vw, var(--space-6));
 	}
 
 	article {
