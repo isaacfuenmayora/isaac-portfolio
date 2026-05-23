@@ -1,10 +1,14 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import ContactSection from '$lib/components/ContactSection.svelte';
 	import ExperienceSection from '$lib/components/ExperienceSection.svelte';
 	import HeroSection from '$lib/components/HeroSection.svelte';
 	import ProjectsSection from '$lib/components/ProjectsSection.svelte';
 	import TopNav from '$lib/components/TopNav.svelte';
 	import { contact, experience, hero, heroLinks, projects, sectionLinks } from '$lib/data/site';
+	import { initPaletteTransition } from '$lib/utils/paletteTransition';
+
+	onMount(initPaletteTransition);
 </script>
 
 <svelte:head>
@@ -27,5 +31,6 @@
 	main {
 		display: grid;
 		gap: 0;
+		background: var(--theme-background);
 	}
 </style>

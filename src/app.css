@@ -9,6 +9,12 @@
 	--neutral-deep: #ddd5c6;
 	--black-text: #04070b;
 
+	/* Palette transition — JS writes --curr-bg, --target-bg, --t each frame */
+	--curr-bg: var(--YI-Background);
+	--target-bg: var(--YI-Background);
+	--t: 0;
+	--theme-background: color-mix(in oklch, var(--curr-bg), var(--target-bg) calc(var(--t) * 100%));
+
 	/* YI */
 	--YI-Background: #14cdda;
 	--YI-Marker-1: #f7be00;
@@ -93,8 +99,9 @@
 	/*
 		Active theme slots (component-agnostic):
 		attach a palette class/data-attribute to any wrapper/section/card to retarget colors.
+		TODO
 	*/
-	--theme-background: var(--YI-Background);
+	/* --theme-background: var(--YI-Background); */
 	--theme-outline: var(--YI-Outline);
 	--theme-prev: var(--YI-Prev);
 	--theme-marker-1: var(--YI-Marker-1);
