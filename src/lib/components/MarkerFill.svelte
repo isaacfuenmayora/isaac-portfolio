@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import { Rectangle, type Point } from '$lib/utils/geometry';
+	import { round, randomNormal } from '$lib/utils/math';
 
 	// SSR fallback dimensions before ResizeObserver fires
 	const FALLBACK_WIDTH = 1000;
@@ -73,19 +74,6 @@
 
 	function opacityFor(): string {
 		return `${Math.max(0.1, opacity)}`;
-	}
-
-	function round(n: number): number {
-		return Number(n.toFixed(2));
-	}
-
-	function randomNormal(mean: number, stdDev: number, clamp?: number): number {
-		const u1 = Math.max(Math.random(), 1e-10);
-		const u2 = Math.random();
-		const z = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
-		const value = mean + z * stdDev;
-		if (clamp === undefined) return value;
-		return Math.max(mean - clamp, Math.min(mean + clamp, value));
 	}
 
 	function createInnerBox(): Rectangle {
