@@ -46,11 +46,10 @@ function getScrollState(sections: Section[]): {
 	if (sections.length === 0) return null;
 
 	const vh = window.innerHeight;
-	const currIndex =
-		sections.findLastIndex((section) => {
-			const rect = section.el.getBoundingClientRect();
-			return rect.top <= vh * 0.5;
-		});
+	const currIndex = sections.findLastIndex((section) => {
+		const rect = section.el.getBoundingClientRect();
+		return rect.top <= vh * 0.5;
+	});
 	if (currIndex === -1) {
 		// TODO: This case shouldn't happen, maybe should log error?
 		// No section has reached the viewport center yet, so we use the first section's bg.
@@ -91,12 +90,13 @@ function handleScroll(sections: Section[]) {
 export function initPaletteTransition(): () => void {
 	const sections = getSections();
 	let ticking = false;
+	let destroyed = false;
 
 	function onScroll() {
 		if (!ticking) {
 			requestAnimationFrame(() => {
 				ticking = false;
-				handleScroll(sections);
+				if (!destroyed) handleScroll(sections);
 			});
 			ticking = true;
 		}
@@ -105,5 +105,8 @@ export function initPaletteTransition(): () => void {
 	window.addEventListener('scroll', onScroll, { passive: true });
 	handleScroll(sections);
 
-	return () => window.removeEventListener('scroll', onScroll);
+	return () => {
+		destroyed = true;
+		window.removeEventListener('scroll', onScroll);
+	};
 }
