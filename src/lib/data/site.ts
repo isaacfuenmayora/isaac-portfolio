@@ -115,17 +115,17 @@ export const sectionLinks: NavLink[] = [
 	{ label: 'Projects', href: '#projects', id: 'projects' },
 	{ label: 'Experience', href: '#experience', id: 'experience' },
 	{ label: 'Contact', href: '#contact', id: 'contact' },
-	{ label: 'Resume', href: '/resume' }
+	{ label: 'Resume', href: '/resume', external: true }
 ];
 
 export const topActionLinks: NavLink[] = [
-	{ label: 'Resume', href: '/resume' },
+	{ label: 'Resume', href: '/resume', external: true },
 	{ label: 'GitHub', href: contact.github, external: true }
 ];
 
 export const heroLinks: NavLink[] = [
 	{ label: 'View Projects', href: '#projects' },
-	{ label: 'Resume', href: '/resume' },
+	{ label: 'Resume', href: '/resume', external: true },
 	{ label: 'GitHub', href: contact.github, external: true }
 ];
 
