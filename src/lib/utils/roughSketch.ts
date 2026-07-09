@@ -21,7 +21,7 @@ const DEFAULTS: ResolvedRoughSketchOptions = {
 	redrawIntervalMs: 250
 };
 
-type DrawFn = (args: {
+export type DrawFn = (args: {
 	rc: RoughSVG;
 	svg: SVGSVGElement;
 	width: number;
