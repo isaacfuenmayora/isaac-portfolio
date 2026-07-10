@@ -84,9 +84,9 @@
 
 	/* SG */
 	--SG-Background: #d1bf83;
-	--SG-Marker-1: #3ab2b1;
+	--SG-Marker-3: #3ab2b1;
 	--SG-Marker-2: #f9f9f9;
-	--SG-Marker-3: #0d0b0b;
+	--SG-Marker-1: #0d0b0b;
 	--SG-Marker-4: #c2c2c2;
 	--SG-Outline: #090a0c;
 	--SG-Prev: #f72b2e; /* normalized from provided "f72b2" */
@@ -123,7 +123,7 @@
 
 	--radius-sm: 12px;
 	--radius-md: 18px;
-	--radius-lg: 24px;
+	--radius-lg: 8px;
 
 	--nav-height: 3.5rem;
 
@@ -153,6 +153,10 @@ body {
 
 body {
 	line-height: 1.5;
+}
+
+p, li {
+	font-weight: 500;
 }
 
 a {
@@ -341,7 +345,6 @@ main {
 }
 
 .section-description {
-	max-width: 62ch;
 	margin: 0.8rem 0 0;
 	font-size: clamp(1rem, 1.4vw, 1.1rem);
 }
