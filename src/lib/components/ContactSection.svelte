@@ -1,21 +1,21 @@
 <script lang="ts">
+	import MarkerFill from '$lib/components/MarkerFill.svelte';
+	import NavLinkItem from '$lib/components/NavLinkItem.svelte';
 	import PageSection from '$lib/components/PageSection.svelte';
-	import type { PaletteName } from '$lib/data/site';
+	import type { NavLink, PaletteName } from '$lib/data/site';
+	import { roughRectangle } from '$lib/attachments/roughOutline';
 
 	interface ContactData {
-		email: string;
-		github: string;
-		linkedin: string;
-		resume: string;
 		cta: string;
 		palette: PaletteName;
 	}
 
 	interface Props {
 		contact: ContactData;
+		contactLinks: NavLink[];
 	}
 
-	let { contact }: Props = $props();
+	let { contact, contactLinks }: Props = $props();
 </script>
 
 <PageSection id="contact" palette={contact.palette}>
@@ -25,30 +25,44 @@
 			<h2 class="section-title">Let's connect</h2>
 		</header>
 
-		<article class="use-theme-background-soft">
-			<p>{contact.cta}</p>
-			<ul class="contact-links">
-				<li><a href={contact.email}>Email</a></li>
-				<li><a href={contact.github} target="_blank" rel="noreferrer">GitHub</a></li>
-				<li><a href={contact.linkedin} target="_blank" rel="noreferrer">LinkedIn</a></li>
-				<li><a href={contact.resume}>Resume</a></li>
-			</ul>
-		</article>
+		<MarkerFill color="var(--theme-marker-2)" opacity={0.7} inset={5} slope={-1} spacing={0.6}>
+			<article
+				{@attach roughRectangle({
+					roughness: 2,
+					stroke: 'var(--theme-outline)',
+					redrawOnHover: true
+				})}
+			>
+				<p>{contact.cta}</p>
+				<div class="contact-links">
+					{#each contactLinks as link (link.href)}
+						<NavLinkItem
+							{link}
+							{@attach roughRectangle({ redrawOnHover: true })}
+							className="contact-link"
+						/>
+					{/each}
+				</div>
+			</article>
+		</MarkerFill>
 	</div>
 </PageSection>
 
 <style>
 	.container {
 		display: grid;
-		gap: clamp(var(--space-3), 2.5vw, var(--space-6));
+		gap: var(--space-6);
 	}
 
 	article {
+		position: relative;
+		z-index: 1;
 		display: grid;
 		gap: 0.8rem;
-		padding: 1rem;
-		border: 2px solid color-mix(in srgb, var(--theme-outline) 75%, black 25%);
-		border-radius: var(--radius-md);
+		padding: clamp(1rem, 2.5vw, 1.75rem);
+		/* border: 2px solid var(--theme-outline);
+		border-radius: var(--radius-lg); */
+		background: transparent;
 	}
 
 	article p {
@@ -64,11 +78,10 @@
 		list-style: none;
 	}
 
-	.contact-links a {
+	.contact-links :global(a.contact-link) {
 		display: inline-flex;
 		width: fit-content;
 		padding: 0.5rem 0.8rem;
-		border: 2px solid color-mix(in srgb, var(--theme-outline) 80%, black 20%);
 		border-radius: 10px;
 		text-decoration: none;
 		font-family: var(--font-mono);

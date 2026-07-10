@@ -11,7 +11,7 @@
 </script>
 
 <nav aria-label="Primary navigation">
-	<div class="container" data-palette="YI2">
+	<div class="container" data-palette="SG2">
 		<a href="#hero">{brand}</a>
 		<div class="links">
 			{#each links as link (link.href)}
@@ -26,16 +26,17 @@
 		position: sticky;
 		top: 0;
 		z-index: 10;
-		height: var(--nav-height);
+		min-height: var(--nav-height);
 		padding: var(--space-3) 0;
-		background: color-mix(in srgb, var(--paper) 78%, white 22%);
-		border-bottom: 1px solid color-mix(in srgb, var(--theme-outline) 24%, transparent);
+		background: var(--SG-Marker-2);
+		/* border-bottom: 1px solid color-mix(in srgb, var(--theme-outline) 24%, transparent); */
 	}
 
 	nav .container {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
+		flex-wrap: nowrap;
 		gap: var(--space-3);
 	}
 
@@ -46,8 +47,8 @@
 
 	.links {
 		display: flex;
-		flex-wrap: wrap;
-		gap: 0.85rem;
+		flex-wrap: nowrap;
+		gap: 1rem;
 	}
 
 	.links :global(a.nav-link) {
@@ -56,12 +57,5 @@
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
 		text-decoration: none;
-	}
-
-	@media (max-width: 720px) {
-		nav .container {
-			align-items: flex-start;
-			flex-direction: column;
-		}
 	}
 </style>
