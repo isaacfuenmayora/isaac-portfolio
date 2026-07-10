@@ -5,7 +5,7 @@
 	import HeroSection from '$lib/components/HeroSection.svelte';
 	import ProjectsSection from '$lib/components/ProjectsSection.svelte';
 	import TopNav from '$lib/components/TopNav.svelte';
-	import { contact, experience, hero, heroLinks, projects, sectionLinks } from '$lib/data/site';
+	import { contact, contactLinks, experience, hero, heroLinks, projects, sectionLinks } from '$lib/data/site';
 	import { initPaletteTransition } from '$lib/utils/paletteTransition';
 
 	onMount(initPaletteTransition);
@@ -24,7 +24,7 @@
 	<HeroSection {hero} {heroLinks} />
 	<ProjectsSection {projects} />
 	<ExperienceSection {experience} />
-	<ContactSection {contact} />
+	<ContactSection {contact} {contactLinks} />
 </main>
 
 <style>

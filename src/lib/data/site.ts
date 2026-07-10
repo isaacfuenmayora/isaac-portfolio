@@ -40,7 +40,6 @@ export type ExperienceEntry = {
 	palette: PaletteName;
 };
 
-// TODO: update this placeholder content. maybe pull from somewhere
 export const hero = {
 	name: 'Isaac Fuenmayor',
 	role: 'Full Stack Software Engineer',
@@ -54,15 +53,16 @@ export const projects: Project[] = [
 	createProject({
 		slug: 'quidquote',
 		title: 'QuidQuote',
-		summary: 'Real-time messaging and shared expense tracking application.',
+		summary:
+			"A messaging app for splitting costs and tracking balances. I got tired of awkward spreadsheets and tools that didn't fit how I actually wanted to manage shared expenses.",
 		impact: 'Built around real-time state, authentication flows, and group balance logic.',
-		tags: ['Rails API', 'GraphQL', 'Action Cable', 'React Native'],
+		tags: ['Rails API', 'GraphQL', 'Action Cable', 'Pundit', 'React Native'],
 		palette: 'MF'
 	}),
 	createProject({
 		slug: 'wikinetwork',
 		title: 'WikiNetwork',
-		summary: 'C++ CLI tool for finding navigation paths between Wikipedia pages.',
+		summary: 'CLI tool for finding navigation paths between Wikipedia pages.',
 		impact: 'Focused on algorithmic search and lazy graph expansion over live API data.',
 		tags: ['C++', 'Graph Traversal', 'BFS/DFS', 'MediaWiki API'],
 		palette: 'NK'
@@ -81,41 +81,50 @@ export const experience: ExperienceEntry[] = [
 	{
 		company: 'InfoTech',
 		role: 'Software Engineer',
-		dates: '2022 - Present',
+		dates: '2022 - 2026',
 		highlights: [
-			'Designed and maintained backend services and APIs powering customer-facing workflows.',
-			'Improved reliability by hardening integrations and reducing failure-prone paths.',
-			'Partnered cross-functionally to ship features with measurable impact and production stability.'
+			'Worked across a large Rails and Vue codebase used by thousands of contractors and project managers.',
+			'Shipped features in reporting, search, integrations, and authorization across backend and frontend.',
+			'Spent a lot of time on cross-cutting production bugs where one issue touches the backend, the frontend, and a partner system all at once.',
+			'Modernized legacy UI and overhauled the test infrastructure.',
+			'Helped make the local dev environment something new engineers could actually set up on day one.'
 		],
 		palette: 'YI2'
 	},
 	{
 		company: 'Springbig',
 		role: 'Software Engineer Intern',
-		dates: '2021 - 2022',
+		dates: '2021',
 		highlights: [
-			'Contributed to production code in a fast-moving engineering environment.',
-			'Built and refined internal tools and features across backend and web surfaces.',
-			'Supported delivery through debugging, testing, and iterative improvements.'
+			'Worked as a liaison between Springbig and external developer teams integrating with our API, helping define how integrations actually worked.',
+			'Automated a reporting workflow that had been eating 10+ hours a week of manual effort using Rails, Python, and AWS Lambda.',
+			'Wrote a ton of SQL for reporting and data pulls.',
+			'Got comfortable debugging integration failures through CloudWatch and API Gateway, which turned into a recurring theme in my career.'
 		],
 		palette: 'MF2'
 	}
 ];
 
 export const contact = {
-	email: 'mailto:isaac@example.com', // TODO: use hireisaac.dev domain for email
-	github: 'https://github.com/isaacfuenmayora',
+	email: 'mailto:hello@hireisaac.dev',
 	linkedin: 'https://www.linkedin.com/in/isaacfuenmayora',
+	github: 'https://github.com/isaacfuenmayora',
 	resume: '/resume',
-	cta: 'Open to software engineering opportunities. Reach out to talk about backend, product, or systems work.',
-	palette: 'NK2' as const
+	cta: "Looking for my next role. If your team works on interesting problems and cares about doing them well, let's talk!",
+	palette: 'SG' as const
 };
+
+export const contactLinks: NavLink[] = [
+	{ label: 'Email', href: contact.email },
+	{ label: 'LinkedIn', href: contact.linkedin, external: true },
+	{ label: 'GitHub', href: contact.github, external: true },
+	{ label: 'Resume', href: contact.resume }
+];
 
 export const sectionLinks: NavLink[] = [
 	{ label: 'Projects', href: '#projects', id: 'projects' },
 	{ label: 'Experience', href: '#experience', id: 'experience' },
-	{ label: 'Contact', href: '#contact', id: 'contact' },
-	{ label: 'Resume', href: '/resume', external: true }
+	{ label: 'Contact', href: '#contact', id: 'contact' }
 ];
 
 export const topActionLinks: NavLink[] = [
@@ -125,8 +134,8 @@ export const topActionLinks: NavLink[] = [
 
 export const heroLinks: NavLink[] = [
 	{ label: 'View Projects', href: '#projects' },
-	{ label: 'Resume', href: '/resume', external: true },
-	{ label: 'GitHub', href: contact.github, external: true }
+	{ label: 'Contact Me', href: '#contact' },
+	{ label: 'Resume', href: '/resume', external: true }
 ];
 
 export const projectJumpLinks: NavLink[] = projects.map((project) => ({
