@@ -220,6 +220,7 @@
 	}
 
 	.is-static path {
+		animation: none;
 		stroke-dasharray: none;
 		stroke-dashoffset: 0;
 	}
