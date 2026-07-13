@@ -40,7 +40,6 @@
 
 <PageSection id="hero" palette={hero.palette}>
 	<MarkerFill
-		class="container"
 		color="var(--theme-marker-2)"
 		opacity={0.36}
 		animated={true}
@@ -117,6 +116,10 @@
 
 	.hero-content > p {
 		margin: 0;
+	}
+
+	.section-description {
+		font-size: clamp(1rem, 1.4vw, 1.1rem);
 	}
 
 	.actions {

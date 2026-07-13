@@ -338,16 +338,6 @@ main {
 	text-transform: uppercase;
 }
 
-.section-title {
-	margin: 0.35rem 0 0;
-	font-size: clamp(1.85rem, 3.2vw, 2.8rem);
-	line-height: 1.12;
-}
-
-.section-description {
-	margin: 0.8rem 0 0;
-	font-size: clamp(1rem, 1.4vw, 1.1rem);
-}
 
 @media (max-width: 768px) {
 	.container {

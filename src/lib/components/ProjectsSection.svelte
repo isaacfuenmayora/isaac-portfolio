@@ -11,62 +11,50 @@
 	let { projects }: Props = $props();
 </script>
 
-<PageSection id="projects" palette="MF">
-	<div class="container">
-		<header>
-			<p class="eyebrow">Featured Projects</p>
-			<h2 class="section-title">What I've built</h2>
-		</header>
-
-		<div class="list">
-			{#each projects as project (project.slug)}
-				<MarkerFill
-					color="var(--theme-marker-1)"
-					opacity={0.8}
-					inset={10}
-					slope={-0.5}
-					spacing={0.5}
+<PageSection id="projects" palette="MF" overline="Featured Projects" title="What I've built">
+	<div class="list">
+		{#each projects as project (project.slug)}
+			<MarkerFill
+				color="var(--theme-marker-1)"
+				opacity={0.8}
+				inset={10}
+				slope={-0.5}
+				spacing={0.5}
+			>
+				<article
+					id={`project-${project.slug}`}
+					data-palette={project.palette}
+					{@attach roughRectangle({
+						roughness: 2.5,
+						stroke: 'var(--theme-outline)',
+						redrawOnHover: true,
+						redrawIntervalMs: 333
+					})}
 				>
-					<article
-						id={`project-${project.slug}`}
-						data-palette={project.palette}
-						{@attach roughRectangle({
-							roughness: 2.5,
-							stroke: 'var(--theme-outline)',
-							redrawOnHover: true,
-							redrawIntervalMs: 333
-						})}
-					>
-						<h3>{project.title}</h3>
-						<p>{project.summary}</p>
-						<p class="meta-label">Why it matters</p>
-						<p>{project.impact}</p>
-						<ul class="tags">
-							{#each project.tags as tag (tag)}
-								<li
-									{@attach roughPill({
-										roughness: 0.5,
-										stroke: 'var(--theme-outline)',
-										redrawOnHover: true
-									})}
-								>
-									{tag}
-								</li>
-							{/each}
-						</ul>
-					</article>
-				</MarkerFill>
-			{/each}
-		</div>
+					<h3>{project.title}</h3>
+					<p>{project.summary}</p>
+					<p class="meta-label">Why it matters</p>
+					<p>{project.impact}</p>
+					<ul class="tags">
+						{#each project.tags as tag (tag)}
+							<li
+								{@attach roughPill({
+									roughness: 0.5,
+									stroke: 'var(--theme-outline)',
+									redrawOnHover: true
+								})}
+							>
+								{tag}
+							</li>
+						{/each}
+					</ul>
+				</article>
+			</MarkerFill>
+		{/each}
 	</div>
 </PageSection>
 
 <style>
-	.container {
-		display: grid;
-		gap: var(--space-6);
-	}
-
 	.list {
 		display: grid;
 		gap: var(--space-7);
@@ -106,6 +94,7 @@
 		font-size: 0.72rem;
 	}
 
+	/* TODO: consider adding "Read more" link using below styling */
 	article a {
 		display: inline-flex;
 		width: fit-content;

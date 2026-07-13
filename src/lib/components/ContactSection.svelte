@@ -18,42 +18,30 @@
 	let { contact, contactLinks }: Props = $props();
 </script>
 
-<PageSection id="contact" palette={contact.palette}>
-	<div class="container">
-		<header>
-			<p class="eyebrow">Contact</p>
-			<h2 class="section-title">Let's connect</h2>
-		</header>
-
-		<MarkerFill color="var(--theme-marker-2)" opacity={0.7} inset={5} slope={-1} spacing={0.6}>
-			<article
-				{@attach roughRectangle({
-					roughness: 2,
-					stroke: 'var(--theme-outline)',
-					redrawOnHover: true
-				})}
-			>
-				<p>{contact.cta}</p>
-				<div class="contact-links">
-					{#each contactLinks as link (link.href)}
-						<NavLinkItem
-							{link}
-							{@attach roughRectangle({ redrawOnHover: true })}
-							className="contact-link"
-						/>
-					{/each}
-				</div>
-			</article>
-		</MarkerFill>
-	</div>
+<PageSection id="contact" palette={contact.palette} overline="Contact" title="Let's connect">
+	<MarkerFill color="var(--theme-marker-2)" opacity={0.7} inset={5} slope={-1} spacing={0.6}>
+		<article
+			{@attach roughRectangle({
+				roughness: 2,
+				stroke: 'var(--theme-outline)',
+				redrawOnHover: true
+			})}
+		>
+			<p>{contact.cta}</p>
+			<div class="contact-links">
+				{#each contactLinks as link (link.href)}
+					<NavLinkItem
+						{link}
+						{@attach roughRectangle({ redrawOnHover: true })}
+						className="contact-link"
+					/>
+				{/each}
+			</div>
+		</article>
+	</MarkerFill>
 </PageSection>
 
 <style>
-	.container {
-		display: grid;
-		gap: var(--space-6);
-	}
-
 	article {
 		position: relative;
 		z-index: 1;
