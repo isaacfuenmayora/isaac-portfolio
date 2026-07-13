@@ -110,7 +110,7 @@ export const contact = {
 	linkedin: 'https://www.linkedin.com/in/isaacfuenmayora',
 	github: 'https://github.com/isaacfuenmayora',
 	resume: '/resume',
-	cta: "Looking for my next role. If your team works on interesting problems and cares about doing them well, let's talk!",
+	cta: "Looking for my next role. If your team works on interesting problems, let's talk!",
 	palette: 'SG' as const
 };
 
@@ -118,7 +118,7 @@ export const contactLinks: NavLink[] = [
 	{ label: 'Email', href: contact.email },
 	{ label: 'LinkedIn', href: contact.linkedin, external: true },
 	{ label: 'GitHub', href: contact.github, external: true },
-	{ label: 'Resume', href: contact.resume }
+	{ label: 'Resume', href: contact.resume, external: true }
 ];
 
 export const sectionLinks: NavLink[] = [
