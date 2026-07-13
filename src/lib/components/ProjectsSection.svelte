@@ -31,9 +31,10 @@
 						id={`project-${project.slug}`}
 						data-palette={project.palette}
 						{@attach roughRectangle({
-							roughness: 3,
+							roughness: 2.5,
 							stroke: 'var(--theme-outline)',
-							redrawOnHover: true
+							redrawOnHover: true,
+							redrawIntervalMs: 333
 						})}
 					>
 						<h3>{project.title}</h3>

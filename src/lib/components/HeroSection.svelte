@@ -76,11 +76,11 @@
 									height="40px"
 									viewBox="0 0 256 256"
 									strokeWidth={7.5}
-									roughness={1.5}
+									roughness={2.5}
 									d={icon.path}
 									redrawOnHover={true}
 									fill="black"
-									hachureGap={7}
+									hachureGap={8}
 								/>
 							</a>
 						{/each}
