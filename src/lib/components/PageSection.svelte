@@ -45,4 +45,9 @@
 		font-size: clamp(1.85rem, 3.2vw, 2.8rem);
 		line-height: 1.12;
 	}
+
+	header {
+		position: relative;
+		z-index: 1;
+	}
 </style>
