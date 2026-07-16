@@ -32,9 +32,13 @@
 	<meta property="og:title" content="Isaac Fuenmayor | Software Engineer" />
 	<meta
 		property="og:description"
-		content="Software engineer building polished, performant web experiences with SvelteKit and TypeScript."
+		content="Full stack rails engineer focused on backend systems, APIs, integrations, and real-time applications."
 	/>
 	<meta property="og:image" content="https://hireisaac.dev/og-image.png" />
+	<meta property="og:image:width" content="2400" />
+	<meta property="og:image:height" content="1260" />
+	<meta property="og:site_name" content="hireisaac.dev" />
+	<meta name="twitter:card" content="summary_large_image" />
 	<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 	<link rel="icon" href="/favicon.ico" sizes="32x32" />
 	<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
