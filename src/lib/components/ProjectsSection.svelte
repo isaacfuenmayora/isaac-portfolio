@@ -1,6 +1,7 @@
 <script lang="ts">
 	import MarkerFill from '$lib/components/MarkerFill.svelte';
 	import PageSection from '$lib/components/PageSection.svelte';
+	import RoughIconLink from '$lib/components/RoughIconLink.svelte';
 	import type { Project } from '$lib/data/site';
 	import { roughPill, roughRectangle } from '$lib/attachments/roughOutline';
 
@@ -14,13 +15,7 @@
 <PageSection id="projects" palette="MF" overline="Featured Projects" title="What I've built">
 	<div class="list">
 		{#each projects as project (project.slug)}
-			<MarkerFill
-				color="var(--theme-marker-1)"
-				opacity={0.8}
-				inset={10}
-				slope={-0.5}
-				spacing={0.5}
-			>
+			<MarkerFill color="var(--theme-marker-1)" opacity={0.8} inset={10} slope={-0.5} spacing={0.5}>
 				<article
 					id={`project-${project.slug}`}
 					data-palette={project.palette}
@@ -47,6 +42,14 @@
 								{tag}
 							</li>
 						{/each}
+						{#if project.github}
+							<RoughIconLink
+								href={project.github}
+								icon="github"
+								label="{project.title} on GitHub"
+								className="social-icons"
+							/>
+						{/if}
 					</ul>
 				</article>
 			</MarkerFill>

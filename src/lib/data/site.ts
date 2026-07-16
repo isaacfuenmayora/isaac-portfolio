@@ -14,6 +14,7 @@ export type Project = {
 	impact: string;
 	tags: string[];
 	href: string;
+	github?: string;
 	palette: PaletteName;
 };
 
@@ -57,6 +58,7 @@ export const projects: Project[] = [
 			"A messaging app for splitting costs and tracking balances. I got tired of awkward spreadsheets and tools that didn't fit how I actually wanted to manage shared expenses.",
 		impact: 'Built around real-time state, authentication flows, and group balance logic.',
 		tags: ['Rails API', 'GraphQL', 'Action Cable', 'Pundit', 'React Native'],
+		github: 'https://github.com/isaacfuenmayora/quidquote',
 		palette: 'MF'
 	}),
 	createProject({
@@ -65,6 +67,7 @@ export const projects: Project[] = [
 		summary: 'CLI tool for finding navigation paths between Wikipedia pages.',
 		impact: 'Focused on algorithmic search and lazy graph expansion over live API data.',
 		tags: ['C++', 'Graph Traversal', 'BFS/DFS', 'MediaWiki API'],
+		github: 'https://github.com/isaacfuenmayora/wikinetwork',
 		palette: 'NK'
 	}),
 	createProject({

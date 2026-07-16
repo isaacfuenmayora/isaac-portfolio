@@ -338,6 +338,20 @@ main {
 	text-transform: uppercase;
 }
 
+.social-icons {
+	position: absolute;
+	top: var(--space-3);
+	right: var(--space-3);
+	display: flex;
+	gap: 0.5rem;
+}
+
+@media (max-width: 433px) {
+	.social-icons {
+		position: static;
+		margin-left: auto;
+	}
+}
 
 @media (max-width: 768px) {
 	.container {
