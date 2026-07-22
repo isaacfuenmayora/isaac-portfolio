@@ -30,18 +30,20 @@
 					<p>{project.summary}</p>
 					<p class="meta-label">Why it matters</p>
 					<p>{project.impact}</p>
-					<ul class="tags">
-						{#each project.tags as tag (tag)}
-							<li
-								{@attach roughPill({
-									roughness: 0.5,
-									stroke: 'var(--theme-outline)',
-									redrawOnHover: true
-								})}
-							>
-								{tag}
-							</li>
-						{/each}
+					<div class="tags-row">
+						<ul class="tags">
+							{#each project.tags as tag (tag)}
+								<li
+									{@attach roughPill({
+										roughness: 0.5,
+										stroke: 'var(--theme-outline)',
+										redrawOnHover: true
+									})}
+								>
+									{tag}
+								</li>
+							{/each}
+						</ul>
 						{#if project.github}
 							<RoughIconLink
 								href={project.github}
@@ -50,7 +52,7 @@
 								className="social-icons"
 							/>
 						{/if}
-					</ul>
+					</div>
 				</article>
 			</MarkerFill>
 		{/each}
@@ -77,6 +79,13 @@
 	h3,
 	article p {
 		margin: 0;
+	}
+
+	.tags-row {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.45rem;
 	}
 
 	.tags {

@@ -13,11 +13,11 @@
 	let { id, palette, overline, title, children }: Props = $props();
 </script>
 
-<section {id} data-palette={palette}>
+<section {id} data-palette={palette} aria-labelledby={title ? `${id}-title` : undefined}>
 	{#if overline || title}
 		<header>
 			{#if overline}<p class="eyebrow">{overline}</p>{/if}
-			{#if title}<h2 class="section-title">{title}</h2>{/if}
+			{#if title}<h2 id="{id}-title" class="section-title">{title}</h2>{/if}
 		</header>
 	{/if}
 	{@render children()}
